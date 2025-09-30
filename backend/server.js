@@ -9,7 +9,9 @@ const server = http.createServer(app);
 
 // Configure CORS for Express
 app.use(cors({
-  origin: ["http://localhost:5173", "http://localhost:3000"],
+  origin: process.env.NODE_ENV === 'production' 
+    ? [process.env.FRONTEND_URL || "https://your-frontend-domain.netlify.app"]
+    : ["http://localhost:5173", "http://localhost:3000"],
   credentials: true
 }));
 
@@ -18,7 +20,9 @@ app.use(express.json());
 // Configure Socket.IO with CORS
 const io = socketIo(server, {
   cors: {
-    origin: ["http://localhost:5173", "http://localhost:3000"],
+    origin: process.env.NODE_ENV === 'production' 
+      ? [process.env.FRONTEND_URL || "https://your-frontend-domain.netlify.app"]
+      : ["http://localhost:5173", "http://localhost:3000"],
     methods: ["GET", "POST"],
     credentials: true
   }
